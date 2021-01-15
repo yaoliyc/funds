@@ -4,6 +4,7 @@
     :custom-class="darkMode ? 'changelog darkMode' : 'changelog'"
     :show-close="false"
     :close-on-click-modal="false"
+    :modal-append-to-body="false"
     :close-on-press-escape="false"
     :visible.sync="centerDialogVisible"
     :top="top + 'px'"
@@ -26,6 +27,7 @@
       <p>电报群：{{ changelog.tgGroup }}</p>
       <p>微信群二维码</p>
       <div ref="qrcode" id="qrcode"></div>
+      <p v-if="changelog.tip">{{changelog.tip}}</p>
       <ul>
         <li v-for="el in changelog.list" :key="el.version">
           <h5>

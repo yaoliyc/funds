@@ -1,13 +1,18 @@
 <template>
   <div v-if="boxShadow" class="shadow" :class="darkMode ? 'darkMode' : ''">
     <div class="content-box">
-      <h5>{{ fund.name }}({{fund.fundcode}})</h5>
+      <h5>{{ fund.name }}({{ fund.fundcode }})</h5>
       <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
         <el-tab-pane lazy label="净值估算" name="first">
           <charts :darkMode="darkMode" :fund="fund" ref="first"></charts>
         </el-tab-pane>
         <el-tab-pane lazy label="持仓明细" name="ccmx">
-          <position-detail :darkMode="darkMode"  @sltStock="sltStock" :fund="fund"> </position-detail>
+          <position-detail
+            :darkMode="darkMode"
+            @sltStock="sltStock"
+            :fund="fund"
+          >
+          </position-detail>
         </el-tab-pane>
         <el-tab-pane lazy label="历史净值" name="second">
           <charts2
@@ -25,14 +30,22 @@
             ref="third"
           ></charts2>
         </el-tab-pane>
+        <el-tab-pane lazy label="基金概况" name="info">
+          <fund-info
+            :darkMode="darkMode"
+            :fund="fund"
+            ref="info"
+            @showManager="showManager"
+          ></fund-info>
+        </el-tab-pane>
       </el-tabs>
 
       <div class="tab-row">
         <input class="btn" type="button" value="返回列表" @click="close" />
       </div>
     </div>
-    <ind-detail mini ref="indDetail" :darkMode="darkMode">
-      </ind-detail>
+    <ind-detail mini ref="indDetail" :darkMode="darkMode"> </ind-detail>
+    <manager-detail ref="managerDetail" :darkMode="darkMode"> </manager-detail>
   </div>
 </template>
 
@@ -41,12 +54,16 @@ import charts from "./charts";
 import charts2 from "./charts2";
 import positionDetail from "./positionDetail";
 import indDetail from "../common/indDetail";
+import fundInfo from "../common/fundInfo";
+import managerDetail from "../common/managerDetail";
 export default {
   components: {
     charts,
     charts2,
     positionDetail,
-    indDetail
+    indDetail,
+    fundInfo,
+    managerDetail,
   },
   name: "fundDetail",
   props: {
@@ -78,7 +95,10 @@ export default {
       this.boxShadow = false;
       this.$emit("close", false);
     },
-    sltStock(val){
+    showManager(val) {
+      this.$refs.managerDetail.init(val);
+    },
+    sltStock(val) {
       this.$refs.indDetail.init(val);
     },
   },

@@ -159,7 +159,7 @@ var setBadge = (fundcode, Realtime, type) => {
     }
 
     let url =
-      "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=100&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=" + userId + "&Fcodes=" +
+      "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=" + userId + "&Fcodes=" +
       fundStr;
     axios
       .get(url)
@@ -229,7 +229,8 @@ var setBadge = (fundcode, Realtime, type) => {
             allAmount += NAV * num;
             var sum = 0;
             if (val.PDATE != "--" && val.PDATE == val.GZTIME.substr(0, 10)) {
-              sum = (NAV - NAV / (1 + val.NAVCHGRT * 0.01)) * num
+              let NAVCHGRT = isNaN(val.NAVCHGRT) ? 0 : val.NAVCHGRT;
+              sum = (NAV - NAV / (1 + NAVCHGRT * 0.01)) * num
             } else {
               let gsz = isNaN(val.GSZ) ? null : val.GSZ
               if (gsz) {
